@@ -4,24 +4,25 @@
  * and open the template in the editor.
  */
 package battleship;
+
 import static battleship.Battleship.chest;
 import static battleship.Battleship.coordinets;
 import static battleship.Battleship.direction;
 import static battleship.Battleship.enemy;
 import static battleship.Battleship.rand;
 
-
 /**
  *
  * @author aguilara42
  */
 public class Player {
+
     public static Battleship level1;
 
     int x;
     int y;
     int HP;
-    char symbol = '@';
+    String symbol = "@ ";
     int score = 0;
     int level = 1;
 
@@ -31,7 +32,7 @@ public class Player {
         this.HP = 10;
         coordinets[0] = x;
         coordinets[1] = y;
-        
+
     }
 
     public static void movePlayer() {
@@ -59,4 +60,19 @@ public class Player {
         level1.update();
 
     }
+
+    public static void levelUp(int a) { 
+        if (a < 25) {
+        }
+    }
+
+    public int getLevel() {
+        return level;
+    }
+
+    public void setLevel(int level) {
+        this.level = level;
+    }
+    
+
 }

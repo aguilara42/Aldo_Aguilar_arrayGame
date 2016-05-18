@@ -37,21 +37,29 @@ public class Battleship {
             }
         }
         intro();
-        generate();
+        generate(2, 0);
         while (1 < 2) {
             generateMap();
             update();
             drawMap();
             userInput();
             enemyMove();
+
             if (health <= 0) {
                 health = 0;
                 lose();
 
             }
 
-            if (score == 2) {
+            if (score == 10) {
                 win();
+            }
+
+            for (int j = 0; j < 2; j++) {
+                if (chest[j][0] == coordinets[0] && chest[j][1] == coordinets[1]) {
+                    score += 1;
+                    generate(j + 1, j);
+                }
             }
         }
     }
@@ -65,8 +73,8 @@ public class Battleship {
 
     }
 
-    public static void generate() {
-        for (int i = 0; i < 2; i++) {
+    public static void generate(int a, int i) {
+        for (i = 0; i < a; i++) {
             for (int j = 0; j < 2; j++) {
                 int x = rand.nextInt(29);
                 int y = rand.nextInt(29);
@@ -89,8 +97,7 @@ public class Battleship {
     }
 
     public static void update() {
-
-        map[coordinets[0]][coordinets[1]] = "@ ";
+        map[coordinets[0]][coordinets[1]] = player.symbol;
 
         for (int i = 0; i < traps; i++) {
 
@@ -126,10 +133,6 @@ public class Battleship {
                 health--;
             }
 
-            if (chest[i][0] == coordinets[0] && chest[0][1] == coordinets[1]) {
-                score++;
-
-            }
         }
         for (int i = 0; i < 29; i++) {
             for (int j = 0; j < 29; j++) {
@@ -174,8 +177,12 @@ public class Battleship {
         score = 0;
         while (1 < 2) {
             score = 0;
-            System.out.println("");
-            System.out.println("Lost play again y/n?");
+            System.out.println("__   __            _              _   \n"
+                    + "\\ \\ / /__  _   _  | |    ___  ___| |_ \n"
+                    + " \\ V / _ \\| | | | | |   / _ \\/ __| __|\n"
+                    + "  | | (_) | |_| | | |__| (_) \\__ \\ |_ \n"
+                    + "  |_|\\___/ \\__,_| |_____\\___/|___/\\__|");
+            System.out.println("Play again y/n?");
             String lost = sc.nextLine().toLowerCase();
             if (lost.contains("y")) {
                 health = 10;
@@ -191,9 +198,12 @@ public class Battleship {
         score = 0;
         while (1 < 2) {
 
-            System.out.println("");
-            System.out.println("P"
-                    + "lay again y/n?");
+            System.out.println("\\ \\ / /__  _   _  \\ \\      / /__  _ __  \n"
+                    + " \\ V / _ \\| | | |  \\ \\ /\\ / / _ \\| '_ \\ \n"
+                    + "  | | (_) | |_| |   \\ V  V / (_) | | | |\n"
+                    + "  |_|\\___/ \\__,_|    \\_/\\_/ \\___/|_| |_|\n"
+                    + "                                        ");
+            System.out.println("Play again y/n?");
             String lost = sc.nextLine().toLowerCase();
             if (lost.contains("y")) {
                 health = 10;
