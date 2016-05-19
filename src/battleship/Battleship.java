@@ -6,13 +6,12 @@ import java.util.Scanner;
 public class Battleship {
 
     public static Player player;
+    public static Enemy[] enemies;
 
     static Scanner sc = new Scanner(System.in);
     public static String direction;
     public static int traps;
     public static String[][] map = new String[30][30];
-    public static int[] coordinets = new int[2];
-    public static int[][] enemy = new int[2][2];
     public static int[][] chest = new int[2][2];
     public static int[][] trap = new int[50][2];
     public static Random rand = new Random();
@@ -37,13 +36,12 @@ public class Battleship {
             }
         }
         intro();
-        generate(2, 0);
+        generateEnemies(2);
         while (1 < 2) {
             generateMap();
             update();
             drawMap();
             userInput();
-            enemyMove();
 
             if (health <= 0) {
                 health = 0;
@@ -56,9 +54,9 @@ public class Battleship {
             }
 
             for (int j = 0; j < 2; j++) {
-                if (chest[j][0] == coordinets[0] && chest[j][1] == coordinets[1]) {
+                if (chest[j][0] == player.getX() && chest[j][1] == player.getY()) {
                     score += 1;
-                    generate(j + 1, j);
+                    //generate(j + 1, j);
                 }
             }
         }
@@ -73,15 +71,15 @@ public class Battleship {
 
     }
 
-    public static void generate(int a, int i) {
-        for (i = 0; i < a; i++) {
-            for (int j = 0; j < 2; j++) {
+    public static void generateEnemies(int a) {
+        for (int i = 0; i < a; i++) {
+            
                 int x = rand.nextInt(29);
                 int y = rand.nextInt(29);
-                enemy[i][j] = x;
-                chest[i][j] = y;
+                enemies[i] = new Enemy(x,y);
+               // chest[i][j] = y;
             }
-        }
+        
     }
 
     public static void intro() {
@@ -97,7 +95,7 @@ public class Battleship {
     }
 
     public static void update() {
-        map[coordinets[0]][coordinets[1]] = player.symbol;
+        map[player.getX()][player.getY()] = player.getSymbol();
 
         for (int i = 0; i < traps; i++) {
 
@@ -106,7 +104,7 @@ public class Battleship {
         }
 
         for (int i = 0; i < 2; i++) {
-            map[enemy[i][0]][enemy[i][1]] = "E ";
+            map[enemies[i].getX()][enemies[i].getY()] = "E ";
             map[chest[i][0]][chest[i][1]] = "T ";
         }
 
@@ -123,13 +121,13 @@ public class Battleship {
     public static void drawMap() {
 
         for (int i = 0; i < traps; i++) {
-            if (trap[i][0] == coordinets[0] && trap[i][1] == coordinets[1]) {
+            if (trap[i][0] == player.getX() && trap[i][1] == player.getY()) {
                 health--;
             }
         }
 
         for (int i = 0; i < 2; i++) {
-            if (enemy[i][0] == coordinets[0] && enemy[i][1] == coordinets[1]) {
+            if (enemies[i].getX() == player.getX() && enemies[i].getX[() == player.getY()) {
                 health--;
             }
 
@@ -145,33 +143,7 @@ public class Battleship {
         }
     }
 
-    public static void enemyMove() {
-        int m = rand.nextInt(101);
-        int i = rand.nextInt(2);
-        if (direction.contains("n") && direction.contains("e") && enemy[i][0] > 0 && enemy[i][1] < 28) {
-            enemy[i][0]--;
-            enemy[i][1]++;
-        } else if (direction.contains("s") && direction.contains("e") && enemy[i][0] < 28 && enemy[i][1] < 28) {
-            enemy[i][0]++;
-            enemy[i][1]++;
-        } else if (direction.contains("s") && direction.contains("w") && enemy[i][0] < 28 && enemy[i][1] > 0) {
-            enemy[i][0]++;
-            enemy[i][1]--;
-        } else if (direction.contains("n") && direction.contains("w") && enemy[i][0] > 0 && enemy[i][1] > 0) {
-            enemy[i][0]--;
-            enemy[i][1]--;
-        } else if (enemy[i][0] > coordinets[0] && enemy[i][0] > 0) {
-            enemy[i][0]--;
-        } else if (enemy[i][1] < coordinets[1] && enemy[i][1] < 28) {
-            enemy[i][1]++;
-        } else if (enemy[i][0] < coordinets[0] && enemy[i][0] < 28) {
-            enemy[i][0]++;
-        } else if (enemy[i][1] > coordinets[1] && enemy[i][1] > 0) {
-            enemy[i][1]--;
-        }
-        update();
 
-    }
 
     public static void lose() {
         score = 0;

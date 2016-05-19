@@ -5,11 +5,8 @@
  */
 package battleship;
 
-import static battleship.Battleship.chest;
-import static battleship.Battleship.coordinets;
+
 import static battleship.Battleship.direction;
-import static battleship.Battleship.enemy;
-import static battleship.Battleship.rand;
 
 /**
  *
@@ -19,49 +16,51 @@ public class Player {
 
     public static Battleship level1;
 
-    int x;
-    int y;
-    int HP;
-    String symbol = "@ ";
-    int score = 0;
-    int level = 1;
+    private static int x;
+    private static int y;
+    private static int HP;
+    private static String symbol;
+    private static int score;
+    private static int level;
 
     Player(int a, int b) {
         this.x = a;
         this.y = b;
         this.HP = 10;
-        coordinets[0] = x;
-        coordinets[1] = y;
+        symbol = "@ ";
+        score = 0;
+        level = 1;
+        
 
     }
 
-    public static void movePlayer() {
-        if (direction.contains("n") && direction.contains("e") && coordinets[0] > 0 && coordinets[1] < 28) {
-            coordinets[0]--;
-            coordinets[1]++;
-        } else if (direction.contains("s") && direction.contains("e") && coordinets[0] < 28 && coordinets[1] < 28) {
-            coordinets[0]++;
-            coordinets[1]++;
-        } else if (direction.contains("s") && direction.contains("w") && coordinets[0] < 28 && coordinets[1] > 0) {
-            coordinets[0]++;
-            coordinets[1]--;
-        } else if (direction.contains("n") && direction.contains("w") && coordinets[0] > 0 && coordinets[1] > 0) {
-            coordinets[0]--;
-            coordinets[1]--;
-        } else if (direction.contains("n") && coordinets[0] > 0) {
-            coordinets[0]--;
-        } else if (direction.contains("e") && coordinets[1] < 28) {
-            coordinets[1]++;
-        } else if (direction.contains("s") && coordinets[0] < 28) {
-            coordinets[0]++;
-        } else if (direction.contains("w") && coordinets[1] > 0) {
-            coordinets[1]--;
+    public  void movePlayer() {
+        if (direction.contains("n") && direction.contains("e") && x > 0 && y < 28) {
+            x--;
+            y++;
+        } else if (direction.contains("s") && direction.contains("e") && x < 28 && y < 28) {
+            x++;
+            y++;
+        } else if (direction.contains("s") && direction.contains("w") && x < 28 && y > 0) {
+            x++;
+            y--;
+        } else if (direction.contains("n") && direction.contains("w") && x > 0 && y > 0) {
+            x--;
+            y--;
+        } else if (direction.contains("n") && x > 0) {
+            x--;
+        } else if (direction.contains("e") && y < 28) {
+            y++;
+        } else if (direction.contains("s") && x < 28) {
+            x++;
+        } else if (direction.contains("w") && y > 0) {
+            y--;
         }
         level1.update();
 
     }
 
-    public static void levelUp(int a) { 
+    public  void levelUp(int a) {
         if (a < 25) {
         }
     }
@@ -73,6 +72,26 @@ public class Player {
     public void setLevel(int level) {
         this.level = level;
     }
-    
 
+    public int getX() {
+        return x;
+    }
+
+    public  int getY() {
+        return y;
+    }
+
+    public  void setX(int x) {
+        Player.x = x;
+    }
+
+    public  void setY(int y) {
+        Player.y = y;
+    }
+
+    public String getSymbol() {
+        return symbol;
+    }
+    
+    
 }
