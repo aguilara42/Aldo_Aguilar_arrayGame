@@ -22,6 +22,7 @@ public class Enemy {
     private static String symbol;
     private static int score;
     private static int level;
+   
 
     Enemy(int a, int b) {
         this.x = a;
@@ -64,12 +65,12 @@ public class Enemy {
         
     }
 
-    public static int getX() {
-        return x;
+    public int getX() {
+        return this.x;
     }
 
-    public static int getY() {
-        return y;
+    public int getY() {
+        return this.y;
     }
     
     

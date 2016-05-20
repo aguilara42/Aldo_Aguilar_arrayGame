@@ -6,13 +6,13 @@ import java.util.Scanner;
 public class Battleship {
 
     public static Player player;
-    public static Enemy[] enemies;
-
+    public static Enemy[] enemies = new Enemy[8];
+    public static Treasure[] chest = new Treasure[8];
+    
     static Scanner sc = new Scanner(System.in);
     public static String direction;
     public static int traps;
     public static String[][] map = new String[30][30];
-    public static int[][] chest = new int[2][2];
     public static int[][] trap = new int[50][2];
     public static Random rand = new Random();
     public static int health = 10;
@@ -36,7 +36,9 @@ public class Battleship {
             }
         }
         intro();
+        
         generateEnemies(2);
+       
         while (1 < 2) {
             generateMap();
             update();
@@ -54,7 +56,7 @@ public class Battleship {
             }
 
             for (int j = 0; j < 2; j++) {
-                if (chest[j][0] == player.getX() && chest[j][1] == player.getY()) {
+                if (chest[j].getX() == player.getX() && chest[j].getY() == player.getY()) {
                     score += 1;
                     //generate(j + 1, j);
                 }
@@ -77,7 +79,7 @@ public class Battleship {
                 int x = rand.nextInt(29);
                 int y = rand.nextInt(29);
                 enemies[i] = new Enemy(x,y);
-               // chest[i][j] = y;
+                chest[i] = new Treasure(x,y);
             }
         
     }
@@ -105,7 +107,7 @@ public class Battleship {
 
         for (int i = 0; i < 2; i++) {
             map[enemies[i].getX()][enemies[i].getY()] = "E ";
-            map[chest[i][0]][chest[i][1]] = "T ";
+            map[chest[i].getX()][chest[i].getY()] = "T ";
         }
 
     }
@@ -127,7 +129,7 @@ public class Battleship {
         }
 
         for (int i = 0; i < 2; i++) {
-            if (enemies[i].getX() == player.getX() && enemies[i].getX[() == player.getY()) {
+            if (enemies[i].getX() == player.getX() && enemies[i].getX() == player.getY()) {
                 health--;
             }
 
