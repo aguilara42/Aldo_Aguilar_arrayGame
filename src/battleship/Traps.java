@@ -9,48 +9,37 @@ import java.util.Random;
 
 /**
  *
- * @author aguilara42
+ * @author Aldo
  */
-public class Treasure {
+public class Traps {
 
     public static Random rand = new Random();
     private int x;
     private int y;
     private String symbol;
-    private int loot;
 
-    Treasure(int a, int b) {
-
+    Traps(int a, int b) {
+        int s = rand.nextInt(2);
         this.x = a;
         this.y = b;
-        symbol = "T ";
-        loot = rand.nextInt(5);
-        //player = Battleship.player;
+        symbol = "# ";
+        if( s == 1){
+            symbol ="- ";
+        }
 
-    }
-
-    public void setX(int x) {
-        this.x = x;
-    }
-
-    public void setY(int y) {
-        this.y = y;
     }
 
     public int getX() {
-        return this.x;
+        return x;
     }
 
     public int getY() {
-        return this.y;
+        return y;
     }
 
     public String getSymbol() {
         return symbol;
     }
-
-    public int getLoot() {
-        return loot;
-    }
-
+    
+    
 }

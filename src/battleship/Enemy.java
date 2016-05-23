@@ -15,14 +15,12 @@ import static battleship.Battleship.update;
  */
 public class Enemy {
 
-
-    private static int x;
-    private static int y;
+    private int x;
+    private int y;
     private static int HP;
     private static String symbol;
     private static int score;
     private static int level;
-   
 
     Enemy(int a, int b) {
         this.x = a;
@@ -35,34 +33,45 @@ public class Enemy {
 
     }
 
-    public static void enemyMove() {
+    public void enemyMove() {
         int m = rand.nextInt(101);
-        int i = rand.nextInt(2);
-        if (direction.contains("n") && direction.contains("e") && x > 0 && y < 28) {
-            x--;
-            y++;
-        } else if (direction.contains("s") && direction.contains("e") && x < 28 && y < 28) {
-            x++;
-            y++;
-        } else if (direction.contains("s") && direction.contains("w") && x < 28 && y > 0) {
-            x++;
-            y--;
-        } else if (direction.contains("n") && direction.contains("w") && x > 0 && y > 0) {
-            x--;
-            y--;
-        } else if (x > Battleship.player.getX() && x > 0) {
-            x--;
-        } else if (y < Battleship.player.getY() && y < 28) {
-            y++;
-        } else if (x < Battleship.player.getX() && x < 28) {
-            x++;
-        } else if (y > Battleship.player.getY() && y > 0) {
-            y--;
-        }
-        update();
+        if (m > 10) {
+            if (direction.contains("n") && direction.contains("e") && x > 0 && y < 28) {
+                setX(x--);
+                setY(y++);
 
-        
-        
+            } else if (direction.contains("s") && direction.contains("e") && x < 28 && y < 28) {
+                setX(x++);
+                setY(y++);
+
+            } else if (direction.contains("s") && direction.contains("w") && x < 28 && y > 0) {
+                setX(x++);
+                setY(y--);
+                System.out.println("move");
+            } else if (direction.contains("n") && direction.contains("w") && x > 0 && y > 0) {
+                setX(x--);
+                setY(y--);
+                System.out.println("move");
+            } else if (Battleship.player.getX() > x && x > 0) {
+                this.x++;
+            } else if (Battleship.player.getY() < y && y < 28) {
+                this.y--;
+            } else if (Battleship.player.getX() < x && x < 28) {
+                this.x--;
+            } else if (Battleship.player.getY() > y && y > 0) {
+                this.y++;
+            }
+            update();
+        }
+
+    }
+
+    public void setX(int x) {
+        this.x = x;
+    }
+
+    public void setY(int y) {
+        this.y = y;
     }
 
     public int getX() {
@@ -72,6 +81,9 @@ public class Enemy {
     public int getY() {
         return this.y;
     }
-    
-    
+
+    public String getSymbol() {
+        return symbol;
+    }
+
 }

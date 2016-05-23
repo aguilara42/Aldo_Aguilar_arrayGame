@@ -8,42 +8,41 @@ public class Battleship {
     public static Player player;
     public static Enemy[] enemies = new Enemy[8];
     public static Treasure[] chest = new Treasure[8];
-    
+    public static Traps[] spikes = new Traps[50];
+
     static Scanner sc = new Scanner(System.in);
     public static String direction;
-    public static int traps;
+
     public static String[][] map = new String[30][30];
-    public static int[][] trap = new int[50][2];
+
     public static Random rand = new Random();
-    public static int health = 10;
+    public static int health;
+    public static int traps;
+    public static int enemyNumber;
+    public static int gameMode;
+    public static int chestNumber;
+    public static int theChest;
     public static int score = 0;
     public static String line;
+    public static int turn;
 
     public static void main(String[] args) {
         startUp();
     }
 
     public static void startUp() {
-        player = new Player(14, 14);
-        traps = rand.nextInt(40 - 10);
-
-        for (int i = 0; i < traps; i++) {
-            for (int j = 0; j < 2; j++) {
-                int b = rand.nextInt(29);
-                int a = rand.nextInt(29);
-                trap[i][j] = a;
-                trap[i][j] = b;
-            }
-        }
         intro();
-        
-        generateEnemies(2);
-       
+        player = new Player(14, 14);
+
+        generateTraps(traps);
+        generateChest(chestNumber, 0);
+        generateEnemies(enemyNumber);
         while (1 < 2) {
             generateMap();
             update();
             drawMap();
             userInput();
+            //move();
 
             if (health <= 0) {
                 health = 0;
@@ -51,16 +50,20 @@ public class Battleship {
 
             }
 
-            if (score == 10) {
+            if (score >= 10) {
                 win();
             }
 
-            for (int j = 0; j < 2; j++) {
-                if (chest[j].getX() == player.getX() && chest[j].getY() == player.getY()) {
-                    score += 1;
-                    //generate(j + 1, j);
+            for (int i = 0; i < chestNumber; i++) {
+                if (chest[i].getX() == player.getX() && chest[i].getY() == player.getY()) {
+                    score += chest[i].getLoot();
+
+                    generateChest(i++, i--);
                 }
+                turn ++;
+                event();
             }
+
         }
     }
 
@@ -73,18 +76,75 @@ public class Battleship {
 
     }
 
+    public static void move() {
+        for (int i = 0; i < enemyNumber; i++) {
+            enemies[i].enemyMove();
+
+        }
+    }
+
     public static void generateEnemies(int a) {
         for (int i = 0; i < a; i++) {
-            
-                int x = rand.nextInt(29);
-                int y = rand.nextInt(29);
-                enemies[i] = new Enemy(x,y);
-                chest[i] = new Treasure(x,y);
-            }
-        
+            int x = rand.nextInt(29);
+            int y = rand.nextInt(29);
+            enemies[i] = new Enemy(x, y);
+            // chest[i] = new Treasure(x,y);
+        }
+
+    }
+
+    public static void generateTraps(int a) {
+        for (int i = 0; i < a; i++) {
+            int x = rand.nextInt(29);
+            int y = rand.nextInt(29);
+            spikes[i] = new Traps(x, y);
+            // chest[i] = new Treasure(x,y);
+        }
+
+    }
+
+    public static void generateChest(int a, int b) {
+        for (int i = b; i < a; i++) {
+            int x = rand.nextInt(29);
+            int y = rand.nextInt(29);
+            chest[i] = new Treasure(x, y);
+        }
+
     }
 
     public static void intro() {
+        int a = 1;
+        while (a == 1) {
+            System.out.println("Selcet your game mode");
+            System.out.println("1.Easy");
+            System.out.println("2.Medium");
+            System.out.println("3.Hard");
+            gameMode = sc.nextInt();
+            if (gameMode == 1) {
+                health = 20;
+                traps = rand.nextInt(25);
+                score = 0;
+                enemyNumber = 2;
+                chestNumber = 5;
+                a++;
+            }
+            if (gameMode == 2) {
+                health = 15;
+                traps = rand.nextInt(30);
+                score = 0;
+                enemyNumber = 4;
+                chestNumber = 4;
+                a++;
+            }
+            if (gameMode == 3) {
+                health = 10;
+                traps = rand.nextInt(50 - 30);
+                score = 0;
+                enemyNumber = 7;
+                chestNumber = 1;
+                a++;
+            }
+        }
         System.out.println("You Wake up alone lost in a desert");
         line = sc.nextLine();
         System.out.println("Surrounded by the beating sun, you see treaures in the distance, do you dare chase these dreams?");
@@ -95,19 +155,32 @@ public class Battleship {
         line = sc.nextLine();
 
     }
+    
+    public static void event(){
+        int chance = rand.nextInt(5);
+        if(turn == 5){
+            turn =0;
+        }
+       if(chance == turn){
+           
+       }
+       if(chance == turn --){
+           
+       }
+    }
 
     public static void update() {
         map[player.getX()][player.getY()] = player.getSymbol();
 
         for (int i = 0; i < traps; i++) {
-
-            map[trap[i][0]][trap[i][1]] = "# ";
-
+            map[spikes[i].getX()][spikes[i].getY()] = spikes[i].getSymbol();
         }
 
-        for (int i = 0; i < 2; i++) {
-            map[enemies[i].getX()][enemies[i].getY()] = "E ";
-            map[chest[i].getX()][chest[i].getY()] = "T ";
+        for (int i = 0; i < chestNumber; i++) {
+            map[chest[i].getX()][chest[i].getY()] = chest[i].getSymbol();
+        }
+        for (int i = 0; i < enemyNumber; i++) {
+            map[enemies[i].getX()][enemies[i].getY()] = enemies[i].getSymbol();
         }
 
     }
@@ -123,17 +196,19 @@ public class Battleship {
     public static void drawMap() {
 
         for (int i = 0; i < traps; i++) {
-            if (trap[i][0] == player.getX() && trap[i][1] == player.getY()) {
+            if (spikes[i].getX() == player.getX() && spikes[i].getY() == player.getY()) {
                 health--;
+                map[spikes[i].getX()][spikes[i].getY()] = "# ";
             }
         }
 
-        for (int i = 0; i < 2; i++) {
+        for (int i = 0; i < enemyNumber; i++) {
             if (enemies[i].getX() == player.getX() && enemies[i].getX() == player.getY()) {
+                map[spikes[i].getX()][spikes[i].getY()] = "# ";
                 health--;
             }
-
         }
+
         for (int i = 0; i < 29; i++) {
             for (int j = 0; j < 29; j++) {
                 if (j < 28) {
@@ -144,8 +219,6 @@ public class Battleship {
             }
         }
     }
-
-
 
     public static void lose() {
         score = 0;
@@ -159,8 +232,6 @@ public class Battleship {
             System.out.println("Play again y/n?");
             String lost = sc.nextLine().toLowerCase();
             if (lost.contains("y")) {
-                health = 10;
-                score = 0;
                 startUp();
             } else {
 
@@ -180,8 +251,6 @@ public class Battleship {
             System.out.println("Play again y/n?");
             String lost = sc.nextLine().toLowerCase();
             if (lost.contains("y")) {
-                health = 10;
-                score = 0;
                 startUp();
             } else {
 
