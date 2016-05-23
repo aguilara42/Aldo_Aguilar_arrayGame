@@ -14,6 +14,9 @@ public class Battleship {
     public static String direction;
 
     public static String[][] map = new String[30][30];
+    
+    public static final String ANSI_RED = "\u001B[31m";
+    public static final String ANSI_RESET = "\u001B[0m";
 
     public static Random rand = new Random();
     public static int health;
@@ -68,6 +71,7 @@ public class Battleship {
     }
 
     public static void userInput() {
+        System.out.println(ANSI_RED + "This text is red!" + ANSI_RESET);
         System.out.println("Health: " + health);
         System.out.println("Score: " + score);
         System.out.println("What diection would you like to move?");
