@@ -9,12 +9,13 @@ public class Battleship {
     public static Enemy[] enemies = new Enemy[8];
     public static Treasure[] chest = new Treasure[8];
     public static Traps[] spikes = new Traps[50];
+    public static Blob[] blobs = new Blob[8];
 
     static Scanner sc = new Scanner(System.in);
     public static String direction;
 
     public static String[][] map = new String[30][30];
-    
+
     public static final String ANSI_RED = "\u001B[31m";
     public static final String ANSI_RESET = "\u001B[0m";
 
@@ -25,6 +26,7 @@ public class Battleship {
     public static int gameMode;
     public static int chestNumber;
     public static int theChest;
+    public static int hard = 1;
     public static int score = 0;
     public static String line;
     public static int turn;
@@ -40,12 +42,13 @@ public class Battleship {
         generateTraps(traps);
         generateChest(chestNumber, 0);
         generateEnemies(enemyNumber);
+        generateBlob(hard);
         while (1 < 2) {
             generateMap();
             update();
             drawMap();
             userInput();
-            //move();
+            move();
 
             if (health <= 0) {
                 health = 0;
@@ -63,7 +66,7 @@ public class Battleship {
 
                     generateChest(i++, i--);
                 }
-                turn ++;
+                turn++;
                 event();
             }
 
@@ -71,8 +74,7 @@ public class Battleship {
     }
 
     public static void userInput() {
-        System.out.println(ANSI_RED + "This text is red!" + ANSI_RESET);
-        System.out.println("Health: " + health);
+        System.out.println(ANSI_RED + "Health: " + health + ANSI_RESET);
         System.out.println("Score: " + score);
         System.out.println("What diection would you like to move?");
         direction = sc.nextLine().toLowerCase();
@@ -87,12 +89,18 @@ public class Battleship {
         }
     }
 
+    public static void moveB() {
+        for (int i = 0; i < enemyNumber; i++) {
+            blobs[i].enemyMove();
+
+        }
+    }
+
     public static void generateEnemies(int a) {
         for (int i = 0; i < a; i++) {
             int x = rand.nextInt(29);
             int y = rand.nextInt(29);
             enemies[i] = new Enemy(x, y);
-            // chest[i] = new Treasure(x,y);
         }
 
     }
@@ -102,7 +110,15 @@ public class Battleship {
             int x = rand.nextInt(29);
             int y = rand.nextInt(29);
             spikes[i] = new Traps(x, y);
-            // chest[i] = new Treasure(x,y);
+        }
+
+    }
+
+    public static void generateBlob(int a) {
+        for (int i = 0; i < a; i++) {
+            int x = rand.nextInt(29);
+            int y = rand.nextInt(29);
+            blobs[i] = new Blob(x, y);
         }
 
     }
@@ -146,9 +162,22 @@ public class Battleship {
                 score = 0;
                 enemyNumber = 7;
                 chestNumber = 1;
+                hard = 4;
                 a++;
             }
         }
+        System.out.println("                                                      /'     `\\\n"
+                + "  __                                            ___/'         `\\\n"
+                + "/'  `\\_                          _            /'                \\\n"
+                + "       \\________________________( )_________/'                   `\\_______\n"
+                + "                             _  | |                _\n"
+                + "          _                 ( \\ |  )  _           ( ) _\n"
+                + "       _ ( )                 \\ `|  | ( )         _| |/ )\n"
+                + "      ( \\| | _                `\\,  |/'/'        ( \\  /'\n"
+                + "       \\,. |/ )                 |   /'           \\  |\n"
+                + "         |  /'                  |  |              | |\n"
+                + "         | |                                      | |");
+        line = sc.nextLine();
         System.out.println("You Wake up alone lost in a desert");
         line = sc.nextLine();
         System.out.println("Surrounded by the beating sun, you see treaures in the distance, do you dare chase these dreams?");
@@ -159,18 +188,33 @@ public class Battleship {
         line = sc.nextLine();
 
     }
-    
-    public static void event(){
-        int chance = rand.nextInt(5);
-        if(turn == 5){
-            turn =0;
+
+    public static void event() {
+        int chance = rand.nextInt(15);
+        if (turn == 5) {
+            turn = 0;
         }
-       if(chance == turn){
-           
-       }
-       if(chance == turn --){
-           
-       }
+        if (chance == turn) {
+            System.out.println(" o)__\n"
+                    + "(_  _`\\\n"
+                    + " z/z\\__)");
+            System.out.println("A dessert frog has blessed you + 1 point");
+            score++;
+            turn = 0;
+        }
+        if (chance == turn--) {
+            System.out.println("  ,*-.\n"
+                    + "    |  |\n"
+                    + ",.  |  |\n"
+                    + "| |_|  | ,.\n"
+                    + "`---.  |_| |\n"
+                    + "    |  .--`\n"
+                    + "    |  |\n"
+                    + "    |  | ");
+            System.out.println("You hugged a sticky cactus health -2");
+            health -= 2;
+            turn = 0;
+        }
     }
 
     public static void update() {
@@ -185,6 +229,9 @@ public class Battleship {
         }
         for (int i = 0; i < enemyNumber; i++) {
             map[enemies[i].getX()][enemies[i].getY()] = enemies[i].getSymbol();
+        }
+        for (int i = 0; i < hard; i++) {
+            map[blobs[i].getX()][blobs[i].getY()] = blobs[i].getSymbol();
         }
 
     }
@@ -208,8 +255,12 @@ public class Battleship {
 
         for (int i = 0; i < enemyNumber; i++) {
             if (enemies[i].getX() == player.getX() && enemies[i].getX() == player.getY()) {
-                map[spikes[i].getX()][spikes[i].getY()] = "# ";
                 health--;
+            }
+        }
+        for (int i = 0; i < hard; i++) {
+            if (blobs[i].getX() == player.getX() && blobs[i].getX() == player.getY()) {
+                health -= 2;
             }
         }
 
