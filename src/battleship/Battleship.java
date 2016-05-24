@@ -49,6 +49,7 @@ public class Battleship {
             drawMap();
             userInput();
             move();
+            moveB();
 
             if (health <= 0) {
                 health = 0;
@@ -90,7 +91,7 @@ public class Battleship {
     }
 
     public static void moveB() {
-        for (int i = 0; i < enemyNumber; i++) {
+        for (int i = 0; i < hard; i++) {
             blobs[i].enemyMove();
 
         }
